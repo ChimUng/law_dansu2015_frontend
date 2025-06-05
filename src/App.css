@@ -1,0 +1,391 @@
+/* src/App.css */
+
+/* Reset & base: Đảm bảo các style cơ bản được thiết lập lại */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif; /* Sử dụng font Inter */
+    background-color: #f9fafb; /* Màu nền nhẹ */
+    color: #333; /* Màu chữ mặc định */
+    line-height: 1.6;
+    min-height: 100vh; /* Chiều cao tối thiểu bằng chiều cao viewport */
+    display: flex; /* Sử dụng flexbox để căn giữa nội dung root */
+    justify-content: center; /* Căn giữa theo chiều ngang */
+    align-items: flex-start; /* Căn trên theo chiều dọc */
+    padding-top: 64px; /* Khoảng đệm trên để tránh bị topbar che */
+    /* Có thể điều chỉnh padding-top này dựa trên chiều cao topbar thực tế */
+}
+
+/* #root {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+} */
+/* Các style cho #root từ index.css có thể xung đột, hãy kiểm tra */
+/* Nếu body đã là flex và căn giữa, có thể không cần style cho #root */
+
+
+/* Import font từ Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+
+/* --- Global Layout: Các container chính --- */
+.app-container {
+    /* min-height: 100vh; */ /* Không cần min-height ở đây nếu body đã lo */
+    background-color: #f9fafb; /* Màu nền */
+    display: flex;
+    flex-direction: column; /* Sắp xếp các phần tử theo cột */
+    width: 100%; /* Chiếm hết chiều rộng */
+    max-width: 1200px; /* Giới hạn chiều rộng tối đa của toàn bộ ứng dụng */
+    /* margin: 0 auto; */ /* Căn giữa app-container nếu body không phải flex hoặc chỉ căn giữa body */
+}
+
+.main-content {
+    flex-grow: 1; /* Chiếm hết không gian còn lại theo chiều dọc */
+    padding: 20px 16px; /* Khoảng đệm xung quanh nội dung chính */
+    width: 100%; /* Chiếm hết chiều rộng của container cha (app-container) */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Căn giữa nội dung bên trong main-content */
+}
+
+/* --- Topbar: Thanh điều hướng trên cùng --- */
+.topbar {
+    width: 100%; /* Chiếm hết chiều rộng */
+    height: 64px; /* Chiều cao cố định */
+    padding: 0 24px; /* Khoảng đệm ngang */
+    background-color: white; /* Màu nền trắng */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* Đổ bóng nhẹ */
+    display: flex; /* Sử dụng flexbox */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: space-between; /* Đẩy tiêu đề và auth sang hai bên */
+    position: fixed; /* Cố định ở trên cùng */
+    top: 0; /* Đặt ở vị trí 0px từ mép trên */
+    left: 0; /* Đặt ở vị trí 0px từ mép trái */
+    right: 0; /* Đặt ở vị trí 0px từ mép phải */
+    z-index: 50; /* Đảm bảo hiển thị trên các nội dung khác */
+    border-bottom: 1px solid #e5e7eb; /* Viền dưới */
+}
+
+.topbar-title {
+    font-size: 1.125rem; /* Kích thước font */
+    font-weight: 600; /* Độ đậm font */
+    color: #4b5563; /* Màu chữ */
+}
+
+.topbar-auth {
+    position: relative; /* Để dropdown menu có thể định vị tuyệt đối */
+    display: flex; /* Sử dụng flexbox để căn chỉnh nút đăng nhập/đăng ký hoặc avatar */
+    align-items: center;
+    gap: 8px; /* Khoảng cách giữa các item */
+}
+
+.avatar {
+    width: 40px; /* Kích thước avatar */
+    height: 40px;
+    border-radius: 50%; /* Bo tròn hoàn toàn */
+    border: 1px solid #d1d5db; /* Viền nhẹ */
+    object-fit: cover; /* Đảm bảo ảnh không bị méo */
+    cursor: pointer; /* Thay đổi con trỏ khi rê chuột */
+}
+
+.dropdown-menu {
+    position: absolute; /* Định vị tuyệt đối */
+    top: 100%; /* Đặt ngay dưới phần tử cha (.topbar-auth) */
+    right: 0; /* Căn theo mép phải */
+    margin-top: 8px; /* Khoảng cách với avatar */
+    background-color: white; /* Nền trắng */
+    border-radius: 6px; /* Bo góc */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06); /* Đổ bóng */
+    border: 1px solid #d1d5db; /* Viền */
+    width: 160px; /* Chiều rộng menu */
+    z-index: 100; /* Đảm bảo hiển thị trên cùng */
+    overflow: hidden; /* Cắt bỏ phần tràn ra (bo góc) */
+}
+
+.dropdown-button {
+    display: block; /* Hiển thị dạng block để chiếm hết chiều rộng */
+    width: 100%; /* Chiếm hết chiều rộng của menu */
+    text-align: left; /* Căn chữ sang trái */
+    padding: 8px 16px; /* Khoảng đệm */
+    font-size: 0.875rem; /* Kích thước font (text-sm) */
+    color: #4b5563; /* Màu chữ */
+    background: none; /* Nền trong suốt */
+    border: none; /* Bỏ viền */
+    cursor: pointer; /* Thay đổi con trỏ */
+    transition: background-color 0.2s ease; /* Hiệu ứng chuyển đổi khi hover */
+}
+
+.dropdown-button:hover {
+    background-color: #f3f4f6; /* Nền khi hover */
+}
+
+.auth-buttons {
+    display: flex; /* Sử dụng flexbox cho nút đăng nhập/đăng ký */
+    gap: 8px; /* Khoảng cách giữa các nút */
+}
+
+.login-button,
+.signup-button {
+    padding: 8px 16px; /* Khoảng đệm */
+    font-size: 0.875rem; /* Kích thước font (text-sm) */
+    border-radius: 4px; /* Bo góc nhẹ */
+    border: none; /* Bỏ viền */
+    cursor: pointer; /* Thay đổi con trỏ */
+    transition: background-color 0.2s ease; /* Hiệu ứng chuyển đổi */
+}
+
+.login-button {
+    background-color: #2563eb; /* Nền màu xanh dương */
+    color: white; /* Chữ màu trắng */
+}
+
+.login-button:hover {
+    background-color: #1d4ed8; /* Nền màu xanh dương đậm hơn khi hover */
+}
+
+.signup-button {
+    background-color: #f3f4f6; /* Nền màu xám nhạt */
+    color: #333; /* Chữ màu mặc định */
+}
+
+.signup-button:hover {
+    background-color: #e5e7eb; /* Nền màu xám đậm hơn khi hover */
+}
+
+
+/* --- Chat Section: Phần chứa tiêu đề, lịch sử chat và input --- */
+.chat-section {
+    display: flex; /* Sử dụng flexbox */
+    flex-direction: column; /* Sắp xếp các phần tử theo cột */
+    align-items: center; /* Căn giữa các phần tử con theo chiều ngang */
+    /* justify-content: flex-start; */ /* Không cần thiết nếu main-content đã lo căn giữa */
+    width: 100%; /* Chiếm hết chiều rộng của container cha (.main-content) */
+    /* padding-top: 96px; */ /* Không cần padding-top ở đây nếu main-content đã có */
+    /* padding-left: 16px; */ /* Không cần padding ngang ở đây nếu chat-container đã lo */
+    /* padding-right: 16px; */
+}
+
+.section-title {
+    font-size: 1.5rem; /* Kích thước font */
+    font-weight: 600; /* Độ đậm font */
+    color: #1f2937; /* Màu chữ */
+    margin-bottom: 24px; /* Khoảng cách dưới tiêu đề */
+    text-align: center; /* Căn giữa tiêu đề */
+}
+
+.chat-container {
+    width: 100%; /* Chiếm hết chiều rộng */
+    max-width: 1024px; /* Giới hạn chiều rộng tối đa của vùng chat */
+    /* Nội dung bên trong (chat history và input) sẽ được căn giữa */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Căn giữa chat history và input */
+}
+
+/* --- Chat Display (Chat History): Vùng hiển thị các tin nhắn --- */
+.chat-history-container {
+    width: 100%; /* Chiếm hết chiều rộng của .chat-container */
+    /* Không cần max-width ở đây vì .chat-container đã giới hạn */
+    display: flex; /* Sử dụng flexbox */
+    flex-direction: column; /* Sắp xếp các bubble theo cột */
+    gap: 12px; /* Khoảng cách giữa các bubble */
+    margin-bottom: 16px; /* Khoảng cách dưới lịch sử chat và trên input */
+    overflow-y: auto; /* Thêm thanh cuộn nếu nội dung dài */
+    padding-right: 8px; /* Thêm padding để thanh cuộn không che mất bubble */
+    /* Đặt chiều cao cố định hoặc tối đa nếu muốn vùng chat có thể cuộn độc lập */
+    /* max-height: calc(100vh - 200px); */ /* Ví dụ: chiều cao viewport trừ đi khoảng 200px cho topbar và input */
+}
+
+.message-bubble {
+    max-width: 80%; /* Giới hạn chiều rộng tối đa của mỗi bubble */
+    padding: 12px 16px; /* Khoảng đệm bên trong bubble */
+    border-radius: 18px; /* Bo góc cho bubble */
+    word-wrap: break-word; /* Đảm bảo chữ dài xuống dòng */
+    /* Dùng align-self trong container thay cho float hoặc margin */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Đổ bóng nhẹ cho bubble */
+}
+
+.user-bubble {
+    align-self: flex-end; /* Căn bubble của người dùng sang phải */
+    background-color: #dcf8c6; /* Màu nền xanh lá nhạt cho người dùng */
+    border-bottom-right-radius: 4px; /* Làm bớt bo góc ở góc dưới phải của bubble người dùng */
+}
+
+.assistant-bubble {
+    align-self: flex-start; /* Căn bubble của trợ lý sang trái */
+    background-color: #ffffff; /* Màu nền trắng cho trợ lý */
+    border: 1px solid #e5e7eb; /* Viền nhẹ */
+    border-bottom-left-radius: 4px; /* Làm bớt bo góc ở góc dưới trái của bubble trợ lý */
+}
+
+.error-bubble {
+    align-self: center; /* Căn giữa bubble lỗi */
+    background-color: #fee2e2; /* Màu nền đỏ nhạt cho lỗi */
+    color: #991b1b; /* Màu chữ đỏ đậm cho lỗi */
+    border: 1px solid #f87171;
+    border-radius: 8px;
+    padding: 8px 12px;
+}
+
+.message-text {
+    margin: 0; /* Bỏ margin mặc định của thẻ p */
+    font-size: 0.875rem; /* Kích thước font (text-sm) */
+    color: #374151; /* Màu chữ */
+}
+
+.message-text strong {
+    font-weight: bold; /* Chữ "Bạn:" hoặc "Trợ lý:" in đậm */
+}
+
+.error-text {
+    color: #991b1b; /* Màu chữ đỏ đậm cho text lỗi */
+}
+
+.relevant-laws {
+    margin-top: 12px; /* Khoảng cách trên phần luật liên quan */
+    border-top: 1px solid #e5e7eb; /* Viền trên */
+    padding-top: 12px; /* Khoảng đệm trên */
+}
+
+.laws-heading {
+    font-size: 1rem; /* Kích thước font */
+    font-weight: 600; /* Độ đậm font */
+    color: #374151; /* Màu chữ */
+    margin-bottom: 8px; /* Khoảng cách dưới tiêu đề luật */
+}
+
+.laws-list {
+    list-style: disc; /* Dấu chấm đầu dòng */
+    padding-left: 20px; /* Khoảng lề trái cho list */
+    font-size: 0.875rem; /* Kích thước font (text-sm) */
+    color: #4b5563; /* Màu chữ */
+    /* space-y-1 trong Tailwind tương đương với margin-bottom cho li */
+    margin-top: 0; /* Đảm bảo không có margin trên list */
+    margin-bottom: 0; /* Đảm bảo không có margin dưới list */
+}
+
+.laws-list li {
+    margin-bottom: 4px; /* Khoảng cách giữa các mục list */
+    line-height: 1.4;
+}
+
+.laws-list li:last-child {
+    margin-bottom: 0; /* Bỏ margin dưới mục cuối cùng */
+}
+
+.law-item strong {
+     font-weight: bold; /* Tên điều luật in đậm */
+     color: #1f2937; /* Màu đậm hơn cho tên điều luật */
+}
+
+
+/* --- Chat Input: Vùng nhập câu hỏi --- */
+.chat-input-form {
+    display: flex; /* Sử dụng flexbox */
+    width: 100%; /* Chiếm hết chiều rộng */
+    max-width: 768px; /* Giới hạn chiều rộng tối đa */
+    padding: 8px 16px; /* Khoảng đệm */
+    background-color: white; /* Nền trắng */
+    border: 1px solid #d1d5db; /* Viền */
+    border-radius: 12px; /* Bo góc */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06); /* Đổ bóng */
+    margin-top: 16px; /* Khoảng cách trên */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    /* Để form input luôn ở dưới cùng trên màn hình lớn,
+       có thể cần thêm position: sticky hoặc bố cục flex/grid phức tạp hơn ở container cha (.chat-container) */
+    flex-shrink: 0; /* Ngăn form bị co lại */
+}
+
+.chat-input-textarea {
+    flex-grow: 1; /* Chiếm hết không gian trống */
+    resize: none; /* Không cho phép resize bằng kéo góc */
+    border: none; /* Bỏ viền */
+    outline: none; /* Bỏ outline khi focus */
+    font-size: 0.875rem; /* Kích thước font (text-sm) */
+    padding: 8px; /* Khoảng đệm */
+    box-sizing: border-box; /* Đảm bảo padding không làm tăng kích thước */
+    min-height: 40px; /* Chiều cao tối thiểu */
+    max-height: 120px; /* Chiều cao tối đa trước khi cuộn */
+    overflow-y: auto; /* Thêm thanh cuộn nếu nội dung vượt quá max-height */
+}
+
+.send-button {
+    padding: 8px; /* Khoảng đệm */
+    color: #2563eb; /* Màu xanh dương */
+    background: none; /* Nền trong suốt */
+    border: none; /* Bỏ viền */
+    cursor: pointer; /* Thay đổi con trỏ */
+    transition: color 0.2s ease; /* Hiệu ứng chuyển đổi màu */
+    display: flex; /* Sử dụng flexbox để căn giữa SVG */
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0; /* Ngăn button bị co lại */
+}
+
+.send-button:hover {
+    color: #1d4ed8; /* Màu xanh dương đậm hơn khi hover */
+}
+
+.send-button:disabled {
+    color: #d1d5db; /* Màu xám khi bị vô hiệu hóa */
+    cursor: not-allowed; /* Con trỏ không cho phép */
+}
+
+.send-button svg {
+    width: 24px; /* Kích thước SVG */
+    height: 24px;
+    transform: rotate(45deg); /* Xoay biểu tượng */
+    margin-left: 4px; /* Khoảng cách bên trái icon */
+}
+
+
+/* --- Notification: Thông báo nhỏ hiển thị ở góc trên --- */
+.notification-container {
+    position: fixed; /* Cố định vị trí */
+    top: 20px; /* Khoảng cách từ mép trên */
+    left: 50%; /* Đặt ở giữa theo chiều ngang */
+    transform: translateX(-50%); /* Dịch sang trái 50% chiều rộng của chính nó để căn giữa hoàn toàn */
+    z-index: 50; /* Đảm bảo hiển thị trên các nội dung khác */
+    width: 100%; /* Chiếm hết chiều rộng để max-width hoạt động */
+    display: flex; /* Sử dụng flexbox để căn giữa box bên trong */
+    justify-content: center;
+    pointer-events: none; /* Cho phép click xuyên qua container này (chỉ tương tác với box) */
+}
+
+.notification-box {
+     background-color: white; /* Nền trắng */
+    border: 1px solid #bfdbfe; /* Viền màu xanh nhạt */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Đổ bóng */
+    border-radius: 12px; /* Bo góc */
+    padding: 12px 24px; /* Khoảng đệm */
+    display: flex; /* Sử dụng flexbox */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    gap: 12px; /* Khoảng cách giữa text và nút đóng */
+    max-width: 448px; /* Giới hạn chiều rộng tối đa */
+    pointer-events: auto; /* Cho phép tương tác (click) vào box này */
+}
+
+.notification-text {
+    color: #2563eb; /* Màu chữ xanh dương */
+    font-size: 0.875rem; /* Kích thước font (text-sm) */
+}
+
+.close-button {
+    background: none; /* Nền trong suốt */
+    border: none; /* Bỏ viền */
+    cursor: pointer; /* Thay đổi con trỏ */
+    color: #9ca3af; /* Màu xám */
+    font-size: 1.125rem; /* Kích thước font (text-lg) */
+    font-weight: bold; /* Độ đậm font */
+    transition: color 0.2s ease; /* Hiệu ứng chuyển đổi màu */
+    flex-shrink: 0; /* Ngăn nút bị co lại */
+}
+
+.close-button:hover {
+    color: #4b5563; /* Màu xám đậm hơn khi hover */
+}
