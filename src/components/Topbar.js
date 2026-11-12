@@ -1,58 +1,16 @@
-// src/components/Topbar.js
-import React, { useState } from 'react';
+import React from 'react';
 
-const Topbar = ({ session, onLogout, onLogin }) => {
-const [open, setOpen] = useState(false);
-
-return (
-    <div className="topbar"> 
-    <div className="topbar-title"> 
-        gemini-flash-api
+const Topbar = () => (
+  <header className="topbar">
+    <div className="brand">
+      <span className="brand-mark" aria-hidden="true">§</span>
+      <div>
+        <p className="brand-name">Luật Minh Bạch</p>
+        <p className="brand-subtitle">Trợ lý tra cứu có dẫn nguồn</p>
+      </div>
     </div>
-
-    <div className="topbar-auth"> 
-        {session ? (
-        <>
-            <img
-            src={session.user.user_metadata.avatar_url || '/logo192.png'} // Fallback avatar
-            alt="avatar"
-            className="avatar" 
-            onClick={() => setOpen(!open)}
-            />
-            {/* Hiển thị dropdown menu nếu open là true */}
-            {open && (
-            <div className="dropdown-menu">
-                <button
-                onClick={() => {
-                    onLogout();
-                    setOpen(false); // Đóng dropdown sau khi đăng xuất
-                }}
-                className="dropdown-button" 
-                >
-                Đăng xuất
-                </button>
-            </div>
-            )}
-        </>
-        ) : (
-        <div className="auth-buttons"> 
-            <button
-            onClick={onLogin}
-            className="login-button" 
-            >
-            Đăng nhập
-            </button>
-            <button
-            onClick={onLogin} // Thường nút đăng ký cũng dẫn đến trang/flow đăng nhập
-            className="signup-button" 
-            >
-            Đăng ký
-            </button>
-        </div>
-        )}
-    </div>
-    </div>
+    <span className="scope-badge">BLDS 2015</span>
+  </header>
 );
-};
 
 export default Topbar;
