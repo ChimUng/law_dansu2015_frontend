@@ -8,7 +8,7 @@ const examples = [
   'Tai nạn giao thông gây thiệt hại thì trách nhiệm bồi thường thế nào?',
 ];
 
-const ChatSection = ({ question, setQuestion, onSubmit, onExample, history, loading }) => (
+const ChatSection = ({ question, setQuestion, onSubmit, onExample, history, loading, demoMode, setDemoMode, progress }) => (
   <section className="chat-section">
     <div className={`welcome-panel ${history.length ? 'welcome-panel--compact' : ''}`}>
       <span className="eyebrow">TRA CỨU CÓ CĂN CỨ</span>
@@ -20,9 +20,16 @@ const ChatSection = ({ question, setQuestion, onSubmit, onExample, history, load
         </button>)}
       </div>}
     </div>
-    <div className="scope-note"><span aria-hidden="true">ⓘ</span>Chỉ trả lời trong phạm vi Bộ luật Dân sự 2015; nội dung không đủ căn cứ sẽ được nói rõ.</div>
+    <div className="scope-note">
+      <span aria-hidden="true">ⓘ</span>
+      <span>Chỉ trả lời trong phạm vi Bộ luật Dân sự 2015; nội dung không đủ căn cứ sẽ được nói rõ.</span>
+      <label className="demo-switch">
+        <input type="checkbox" checked={demoMode} onChange={(event) => setDemoMode(event.target.checked)} />
+        <span>Chế độ demo RAG</span>
+      </label>
+    </div>
     <div className="chat-container">
-      <ChatDisplay history={history} />
+      <ChatDisplay history={history} progress={progress} />
       <ChatInput question={question} setQuestion={setQuestion} onSubmit={onSubmit} loading={loading} />
       <p className="input-hint">Enter để gửi · Shift + Enter để xuống dòng</p>
     </div>
